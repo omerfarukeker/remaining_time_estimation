@@ -4,10 +4,10 @@ Estimating the remaining time of a lengthy job in a for loop
 Repository consists of 2 files:
 
 
- 1- A function to generate a lengthy job. Size of the job is randomly generated.
+1. A function to generate a lengthy job. Size of the job is randomly generated.
  
  
- 2- A script file to call the function many times and estimate and visualise the remaining times
+2. A script file to call the function many times and estimate and visualise the remaining times
  
  
  
