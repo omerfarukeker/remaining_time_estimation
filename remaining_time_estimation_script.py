@@ -2,6 +2,7 @@
 
 """
 Following python script calls a lengthy job function in a for loop hundred times.
+Dynamic visualisation of the loop
 
 """
 
@@ -40,10 +41,35 @@ cumsum_durs = pd.Series(durs).cumsum()
 actual = np.linspace(t2-t1,0,loop_size)
 real_time = np.linspace(0,sum(durs),loop_size)
 
-plt.plot(real_time,actual,linewidth=5,linestyle="--")
-plt.plot(real_time,ests,linewidth=3)
-plt.xlabel("Time(s)")
-plt.ylabel("Remaining Time(s)")
-plt.title("Remaining Time Estimation",fontweight="bold")
-plt.legend(["Actual","Predicted"])
-plt.grid(linestyle=":")
+#dynamic plotting of the predictions
+import matplotlib.animation as an
+from matplotlib.gridspec import GridSpec
+
+gs = GridSpec(1,2,width_ratios=[10,1])
+
+fig = plt.figure(figsize=(12,5))
+fig.subplots_adjust(wspace=0.305)
+ax = fig.add_subplot(gs[0,0])
+ax2 = fig.add_subplot(gs[0,1])
+
+lines = []
+delay = 100
+
+for i in range(len(real_time)): 
+    line1, = ax.plot(real_time[:i],actual[:i],linewidth=5,linestyle="--",c="sandybrown")
+    line2, = ax.plot(real_time[:i],ests[:i],linewidth=3,c="cornflowerblue")
+    line3, = ax2.bar(0,job_sizes[i],color="cornflowerblue")
+    lines.append([line1,line2,line3])
+    
+ax.grid(linestyle=":")
+ax.set_xlabel("Time(s)")
+ax.set_ylabel("Remaining Time(s)")
+ax.set_title("Remaining Time Estimation",fontweight="bold")
+ax.legend(["Actual","Predicted"])
+ax2.tick_params(axis="x",labelbottom=False)
+ax2.set_title("Job Size",fontweight="bold")
+ax2.set_ylabel("For Loop: Number of Iterations")
+anim = an.ArtistAnimation(fig,lines,interval = delay)
+
+#use pillowWriters for saving gif files
+anim.save("Remaining Time.gif",writer="pillow")
